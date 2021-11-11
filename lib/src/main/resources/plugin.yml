@@ -1,0 +1,4 @@
+name: 'RandomStuff'
+main: '${main}'
+version: '${version}'
+api-version: '1.17'
