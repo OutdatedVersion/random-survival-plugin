@@ -5,13 +5,16 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
-class ChatMentionHandler: Listener {
+class ChatMentionHandler(private val defaultTimeFormatter: DateTimeFormatter): Listener {
     @EventHandler
     fun handleChatEvent(event: AsyncChatEvent) {
         event.isCancelled = true
@@ -21,10 +24,10 @@ class ChatMentionHandler: Listener {
         Bukkit.getOnlinePlayers().forEach { player ->
             val message = mutableListOf<Component>()
             var mentioned = false
-            val regex = """(.*)(@?${player.name})(.*)""".toRegex(RegexOption.IGNORE_CASE)
+            val nameRegex = """(.*)(@?${player.name})(.*)""".toRegex(RegexOption.IGNORE_CASE)
 
             parts.forEach {
-                if (regex.matches(it)) {
+                if (nameRegex.matches(it)) {
                     mentioned = true
                     message.add(Component.text(it, NamedTextColor.YELLOW))
                 } else {
@@ -32,16 +35,17 @@ class ChatMentionHandler: Listener {
                 }
             }
 
+            val timestampText = Component.text("Sent at ${this.defaultTimeFormatter.format(Instant.now())}", NamedTextColor.GRAY)
             player.sendMessage(
                 Component.join(
                     JoinConfiguration.separator(Component.space()),
-                    Component.text("<${event.player.name}>"),
+                    Component.text("<${event.player.name}>").hoverEvent(HoverEvent.showText(timestampText)),
                     *message.toTypedArray()
                 )
             )
 
             if (mentioned) {
-                player.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 0.5f, 1f))
+                player.playSound(Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 0.8f, 1f))
             }
         }
     }
