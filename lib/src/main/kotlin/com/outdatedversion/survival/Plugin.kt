@@ -1,12 +1,12 @@
 package com.outdatedversion.survival
 
-import co.aikar.commands.CommandManager
 import co.aikar.commands.PaperCommandManager
 import com.outdatedversion.survival.command.CoordinatesCommand
+import com.outdatedversion.survival.command.TimeStampToggle
 import org.bukkit.plugin.java.JavaPlugin
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 
 class Plugin: JavaPlugin() {
     private lateinit var commandManager: PaperCommandManager
@@ -14,9 +14,11 @@ class Plugin: JavaPlugin() {
     override fun onEnable() {
         this.commandManager = PaperCommandManager(this)
         this.commandManager.registerCommand(CoordinatesCommand())
+        server.pluginManager.registerEvents(ChatMessage(this), this) // Converted from Java
+        server.getPluginCommand("timezone")!!.setExecutor(TimeStampToggle(this)) // Converted from Java
 
-        val timeFormat = DateTimeFormatter.ofPattern("hh:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
-        this.server.pluginManager.registerEvents(ChatMentionHandler(timeFormat), this);
+       // val timeFormat = DateTimeFormatter.ofPattern("hh:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
+        //this.server.pluginManager.registerEvents(ChatMentionHandler(timeFormat), this);
     }
 
     override fun onDisable() {

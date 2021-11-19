@@ -2,3 +2,8 @@ name: 'RandomStuff'
 main: '${main}'
 version: '${version}'
 api-version: '1.17'
+commands:
+  timezone:
+    description: Sets your timezone
+    usage: /<command> set +2 (This sets your timezone offset from GMT eg. -8 = GMT-8 PST, +2 = GMT+2 ISR etc.)
+    aliases: tz
