@@ -20,7 +20,7 @@ class Plugin : JavaPlugin() {
             .registerCompletion("timezones") { TimeZone.getAvailableIDs().toMutableList() }
 
         val timeFormat =
-            DateTimeFormatter.ofPattern("hh:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
+            DateTimeFormatter.ofPattern("h:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
         this.server.pluginManager.registerEvents(ChatMentionHandler(this, timeFormat), this)
         this.server.pluginManager.registerEvents(SessionHandler(timeFormat), this)
     }
