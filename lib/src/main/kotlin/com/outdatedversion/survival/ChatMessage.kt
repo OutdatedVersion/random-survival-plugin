@@ -13,8 +13,8 @@ import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.persistence.PersistentDataType
+import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.*
 
 
@@ -34,13 +34,13 @@ class ChatMessage(main: Plugin) : Listener {
             var mentioned = false
             val nameRegex = """(.*)(@?${player.name})(.*)""".toRegex(RegexOption.IGNORE_CASE)
             val data = player.persistentDataContainer
-            val timezoneOffSet = data.get(namespacedKey, PersistentDataType.STRING)
+            val timezone = data.get(namespacedKey, PersistentDataType.STRING)
             // Gets time in specified time-zone
-            val timeZone = TimeZone.getTimeZone("GMT$timezoneOffSet")
-            val timeFormat = SimpleDateFormat("hh:mm a") // Specify time format eg. 01:30 pm
-            timeFormat.timeZone = timeZone // Sets time zonm
-            val date = Date()
-            val currentTime = timeFormat.format(date)
+
+            val timeFormat: DateFormat = SimpleDateFormat("HH:mm a")
+            timeFormat.timeZone = TimeZone.getTimeZone(timezone)
+            val currentTime = timeFormat.format(Date())
+           // timeFormat.timeZone = timeZone // Sets time zonm
             println(currentTime)
 //            player.sendMessage(
 //                Component.text("<" + event.player.name + "> ").append(

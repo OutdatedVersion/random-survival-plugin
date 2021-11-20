@@ -29,10 +29,10 @@ class TimeStampToggle(main: Plugin) : CommandExecutor {
             if (sender is Player) {
                 player.sendMessage(ChatColor.YELLOW.toString() + "How to set your chat timezone?")
                 player.sendMessage(ChatColor.GRAY.toString() + "To set your chats timezone follow the instructions below")
-                player.sendMessage(ChatColor.GRAY.toString() + "/timezone set <your GMT offset>")
-                player.sendMessage(ChatColor.GREEN.toString() + "eg. /timezone set +2 (this will set your timezone to GMT+2)")
+                player.sendMessage(ChatColor.GRAY.toString() + "/timezone set <your-timezone>")
+                player.sendMessage(ChatColor.GREEN.toString() + "eg. /timezone set America/Los_Angeles (this will set your timezone to (CA Timezone)")
                 val pastebin = TextComponent("this link.")
-                val gmtMessage = TextComponent("If you dont know your offset click ")
+                val gmtMessage = TextComponent("If you dont know your timezone click ")
                 pastebin.setUnderlined(true)
                 pastebin.color = ChatColor.YELLOW
                 pastebin.setBold(true)
@@ -48,9 +48,9 @@ class TimeStampToggle(main: Plugin) : CommandExecutor {
         } else {
             if (args[0].equals("set", ignoreCase = true) && !args[1].isEmpty()) {
                 data.set(namespacedKey, PersistentDataType.STRING, args[1])
-                player.sendMessage(ChatColor.YELLOW.toString() + player.name + ChatColor.GRAY + " your timezone has been set to GMT" + args[1])
+                player.sendMessage(ChatColor.YELLOW.toString() + player.name + ChatColor.GRAY + " your timezone has been set to " + args[1])
             } else if (args[0].equals("show", ignoreCase = true)) {
-                player.sendMessage(ChatColor.YELLOW.toString() + player.name + ChatColor.GRAY + " your time zone is set to GMT" + timezone)
+                player.sendMessage(ChatColor.YELLOW.toString() + player.name + ChatColor.GRAY + " your time zone is set to " + timezone)
             }
             true
         }
