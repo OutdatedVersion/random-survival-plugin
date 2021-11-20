@@ -16,7 +16,8 @@ class Plugin: JavaPlugin() {
         this.commandManager.registerCommand(CoordinatesCommand())
 
         val timeFormat = DateTimeFormatter.ofPattern("hh:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
-        this.server.pluginManager.registerEvents(ChatMentionHandler(timeFormat), this);
+        this.server.pluginManager.registerEvents(ChatMentionHandler(timeFormat), this)
+        this.server.pluginManager.registerEvents(SessionHandler(timeFormat), this)
     }
 
     override fun onDisable() {
