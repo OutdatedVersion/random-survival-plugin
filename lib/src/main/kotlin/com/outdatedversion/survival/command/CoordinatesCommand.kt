@@ -12,7 +12,7 @@ class CoordinatesCommand: BaseCommand() {
     fun handleCommand(player: Player, vararg message: String) {
         val loc = player.location
         val env = this.formatEnvironment(loc.world.environment)
-        val msg = message.joinToString(separator = " ", postfix = " ")
+        val msg = message.joinToString(separator = " ", postfix = " ").trimStart()
         player.chat("${msg}${loc.blockX}, ${loc.blockY}, ${loc.blockZ} (${env})")
     }
 
