@@ -22,9 +22,9 @@ import java.util.regex.Pattern
 class ChatMentionHandler(private val defaultTimeFormatter: DateTimeFormatter, private val pluginInstance: Plugin): Listener {
     @EventHandler
     fun handleChatEvent(event: AsyncChatEvent) {
-        val namespacedKey = NamespacedKey(pluginInstance, "timezone")
+        val namespacedKey = NamespacedKey(pluginInstance, "timezone") // Sets Key
 
-        event.isCancelled = true
+        event.isCancelled = true // Cancels default message
 
         Bukkit.getOnlinePlayers().forEach { player ->
             var mentioned = false
