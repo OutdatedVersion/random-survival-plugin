@@ -38,7 +38,7 @@ tasks.processResources {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "16"
+    kotlinOptions.jvmTarget = "17"
     kotlinOptions.javaParameters = true
 }
 
