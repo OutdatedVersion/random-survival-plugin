@@ -2,6 +2,7 @@ package com.outdatedversion.survival.command;
 
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.*
+import com.destroystokyo.paper.ClientOption
 import com.outdatedversion.survival.format
 import com.outdatedversion.survival.formatEnvironment
 import com.outdatedversion.survival.model.PointOfInterest
