@@ -1,11 +1,16 @@
 package com.outdatedversion.survival.command;
 
 import co.aikar.commands.BaseCommand
-import co.aikar.commands.annotation.*
-import com.destroystokyo.paper.ClientOption
+import co.aikar.commands.annotation.CommandAlias
+import co.aikar.commands.annotation.Default
+import co.aikar.commands.annotation.Private
+import co.aikar.commands.annotation.Single
+import co.aikar.commands.annotation.Subcommand
+import com.outdatedversion.survival.ChatProcessor
 import com.outdatedversion.survival.format
 import com.outdatedversion.survival.formatEnvironment
 import com.outdatedversion.survival.model.PointOfInterest
+import com.outdatedversion.survival.model.asComponent
 import com.outdatedversion.survival.persistence.service.PointsOfInterestService
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
@@ -17,7 +22,10 @@ import org.bukkit.entity.Player
 import java.util.*
 
 @CommandAlias("pointsofinterest|poi")
-class PointsOfInterestCommand(private val pointsOfInterestService: PointsOfInterestService): BaseCommand() {
+class PointsOfInterestCommand(
+    private val pointsOfInterestService: PointsOfInterestService,
+    private val chatProcessor: ChatProcessor,
+): BaseCommand() {
     @Default
     fun handleCommand(player: Player) {
         val points = this.pointsOfInterestService.getAll(player.uniqueId)
@@ -49,6 +57,7 @@ class PointsOfInterestCommand(private val pointsOfInterestService: PointsOfInter
                 )
             }
         }
+
         player.sendMessage(
             Component.join(
                 JoinConfiguration.separator(Component.space()),
@@ -63,6 +72,7 @@ class PointsOfInterestCommand(private val pointsOfInterestService: PointsOfInter
     @Subcommand("remove")
     fun handleRemove(player: Player, @Single id: String) {
         val poi = this.pointsOfInterestService.remove(player.uniqueId, UUID.fromString(id))
+
         if (poi != null) {
             player.sendMessage(Component.text("Removed ", NamedTextColor.RED).append(this.formatPointOfInterest(poi)))
         } else {
@@ -80,7 +90,25 @@ class PointsOfInterestCommand(private val pointsOfInterestService: PointsOfInter
             return
         }
 
-        player.chat("${poi.context} ${poi.coords.format()} (${formatEnvironment(poi.env)})")
+        this.chatProcessor.processAndSendPlayerChat(player, poi.asComponent())
+    }
+
+    @Private
+    @Subcommand("save")
+    fun handleSave(player: Player, @Single ownerId: String, @Single id: String) {
+        val poi = this.pointsOfInterestService.get(UUID.fromString(ownerId), UUID.fromString(id))
+
+        if (poi == null) {
+            player.sendMessage(Component.text("Could not find that PoI", NamedTextColor.RED))
+            return
+        }
+
+        val newPoi = this.pointsOfInterestService.save(player.uniqueId, poi.copy(id = UUID.randomUUID()))
+        player.sendMessage(
+            Component.text("Saved ", NamedTextColor.GRAY)
+                .append(this.formatPointOfInterest(newPoi))
+                .append(Component.text(" View with /poi", NamedTextColor.DARK_AQUA))
+        )
     }
 
     private fun formatPointOfInterest(poi: PointOfInterest): Component {

@@ -32,7 +32,7 @@ class Plugin : JavaPlugin() {
         val chatProcessor = DefaultChatProcessor(defaultChatFormatter)
 
         this.commandManager.registerCommand(CoordinatesCommand(poiService, chatProcessor))
-        this.commandManager.registerCommand(PointsOfInterestCommand(poiService))
+        this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
 
         this.server.pluginManager.registerEvents(ChatEventListener(chatProcessor), this)
