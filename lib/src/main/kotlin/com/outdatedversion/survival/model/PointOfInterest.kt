@@ -24,14 +24,16 @@ data class PointOfInterest(
 fun PointOfInterest.asComponent(): Component {
     return Component.join(
         JoinConfiguration.separator(Component.space()),
-        Component.text("${context}${coords.format()} ${formatEnvironment(env)}"),
+        Component.text("$context ${coords.format()} (${formatEnvironment(env)})"),
         Component.text("[save]", NamedTextColor.YELLOW)
             .hoverEvent(
                 HoverEvent.showText(
-                    Component.text("Click to save ", NamedTextColor.GRAY)
-                        .append(Component.text(context, NamedTextColor.YELLOW)).append(
-                            Component.text("to your points", NamedTextColor.GRAY)
-                        )
+                    Component.join(
+                        JoinConfiguration.separator(Component.space()),
+                        Component.text("Click to save", NamedTextColor.GRAY),
+                        Component.text(context, NamedTextColor.YELLOW),
+                        Component.text("to your points", NamedTextColor.GRAY)
+                    )
                 )
             )
             .clickEvent(ClickEvent.runCommand("/pointsofinterest save $ownerId $id"))

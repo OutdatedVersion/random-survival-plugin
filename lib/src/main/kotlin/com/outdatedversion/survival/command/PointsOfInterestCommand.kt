@@ -103,11 +103,18 @@ class PointsOfInterestCommand(
             return
         }
 
-        val newPoi = this.pointsOfInterestService.save(player.uniqueId, poi.copy(id = UUID.randomUUID()))
+        val newPoi = this.pointsOfInterestService.save(
+            player.uniqueId,
+            poi.copy(id = UUID.randomUUID(), ownerId = player.uniqueId)
+        )
         player.sendMessage(
-            Component.text("Saved ", NamedTextColor.GRAY)
-                .append(this.formatPointOfInterest(newPoi))
-                .append(Component.text(" View with /poi", NamedTextColor.DARK_AQUA))
+            Component.join(
+                JoinConfiguration.separator(Component.space()),
+                Component.text("Saved", NamedTextColor.GRAY),
+                this.formatPointOfInterest(newPoi),
+                Component.text("(View with /poi)", NamedTextColor.DARK_AQUA)
+                    .clickEvent(ClickEvent.runCommand("/pointsofinterest"))
+            )
         )
     }
 
