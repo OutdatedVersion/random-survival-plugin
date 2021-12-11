@@ -70,8 +70,8 @@ class PointsOfInterestCommand(
 
     @Private
     @Subcommand("remove")
-    fun handleRemove(player: Player, @Single id: String) {
-        val poi = this.pointsOfInterestService.remove(player.uniqueId, UUID.fromString(id))
+    fun handleRemove(player: Player, @Single id: UUID) {
+        val poi = this.pointsOfInterestService.remove(player.uniqueId, id)
 
         if (poi != null) {
             player.sendMessage(Component.text("Removed ", NamedTextColor.RED).append(this.formatPointOfInterest(poi)))
@@ -82,8 +82,8 @@ class PointsOfInterestCommand(
 
     @Private
     @Subcommand("say")
-    fun handleSay(player: Player, @Single id: String) {
-        val poi = this.pointsOfInterestService.get(player.uniqueId, UUID.fromString(id))
+    fun handleSay(player: Player, @Single id: UUID) {
+        val poi = this.pointsOfInterestService.get(player.uniqueId, id)
 
         if (poi == null) {
             player.sendMessage(Component.text("That did not match any of your saved points", NamedTextColor.RED))
@@ -95,8 +95,8 @@ class PointsOfInterestCommand(
 
     @Private
     @Subcommand("save")
-    fun handleSave(player: Player, @Single ownerId: String, @Single id: String) {
-        val poi = this.pointsOfInterestService.get(UUID.fromString(ownerId), UUID.fromString(id))
+    fun handleSave(player: Player, @Single ownerId: UUID, @Single id: UUID) {
+        val poi = this.pointsOfInterestService.get(ownerId, id)
 
         if (poi == null) {
             player.sendMessage(Component.text("Could not find that PoI", NamedTextColor.RED))
