@@ -3,25 +3,29 @@ package com.outdatedversion.survival.command
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.CommandAlias
 import co.aikar.commands.annotation.Default
-import org.bukkit.World
+import com.outdatedversion.survival.asHumanReadableText
+import com.outdatedversion.survival.model.PointOfInterest
+import com.outdatedversion.survival.persistence.service.PointsOfInterestService
 import org.bukkit.entity.Player
+import java.util.*
 
 @CommandAlias("coordinates|coords")
-class CoordinatesCommand: BaseCommand() {
+class CoordinatesCommand(private val pointsOfInterestService: PointsOfInterestService): BaseCommand() {
     @Default
     fun handleCommand(player: Player, vararg message: String) {
-        val loc = player.location
-        val env = this.formatEnvironment(loc.world.environment)
         val msg = message.joinToString(separator = " ", postfix = " ").trimStart()
-        player.chat("${msg}${loc.blockX}, ${loc.blockY}, ${loc.blockZ} (${env})")
-    }
+        player.chat("${msg}${player.location.asHumanReadableText()}")
 
-    private fun formatEnvironment(environment: World.Environment): String {
-        return when (environment) {
-            World.Environment.NORMAL -> "Overworld"
-            World.Environment.NETHER -> "The Nether"
-            World.Environment.THE_END -> "The End"
-            else -> "Unknown"
+        if (msg.isNotEmpty()) {
+            this.pointsOfInterestService.save(
+                player.uniqueId,
+                PointOfInterest(
+                    id=UUID.randomUUID(),
+                    coords=player.location.toVector(),
+                    env=player.location.world.environment,
+                    context=msg.trim()
+                )
+            )
         }
     }
 }
