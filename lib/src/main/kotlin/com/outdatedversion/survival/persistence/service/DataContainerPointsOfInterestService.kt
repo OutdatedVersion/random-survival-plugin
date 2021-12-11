@@ -11,8 +11,13 @@ class DataContainerPointsOfInterestService(private val plugin: Plugin): PointsOf
 
     override fun save(owner: UUID, poi: PointOfInterest): PointOfInterest {
         this.modifyPoints(owner) { points ->
+            val existing = points.find { it.id == poi.id }
+            if (existing != null) {
+                points.remove(existing)
+            }
             points.add(poi)
         }
+
         return poi
     }
 

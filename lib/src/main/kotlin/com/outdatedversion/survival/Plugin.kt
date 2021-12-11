@@ -41,6 +41,7 @@ class Plugin: JavaPlugin() {
         this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
 
+        this.server.pluginManager.registerEvents(DataMigrationEventListener(poiService), this)
         this.server.pluginManager.registerEvents(ChatEventListener(chatProcessor), this)
         this.server.pluginManager.registerEvents(SessionHandler(defaultTimeFormat), this)
     }

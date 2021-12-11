@@ -26,6 +26,9 @@ class PointOfInterestArrayPersistentDataType(private val plugin: Plugin):
         return complex.map { poi ->
             val container = context.newPersistentDataContainer()
             container.set(plugin.createKey("id"), UuidPersistentDataType.Default, poi.id)
+            if (poi.ownerId != null) {
+                container.set(plugin.createKey("owner_id"), UuidPersistentDataType.Default, poi.ownerId)
+            }
             container.set(plugin.createKey("block_key"), VectorPersistentDataType.Default, poi.coords)
             container.set(plugin.createKey("world_environment_name"), PersistentDataType.STRING, poi.env.name)
             container.set(plugin.createKey("context"), PersistentDataType.STRING, poi.context)
