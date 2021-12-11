@@ -11,19 +11,25 @@ import com.outdatedversion.survival.persistence.service.DataContainerPointsOfInt
 import com.outdatedversion.survival.persistence.service.PointsOfInterestService
 import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
-import java.lang.IllegalArgumentException
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-
-class Plugin : JavaPlugin() {
+class Plugin: JavaPlugin() {
     private lateinit var commandManager: PaperCommandManager
 
     override fun onEnable() {
         this.commandManager = PaperCommandManager(this)
         this.commandManager.commandCompletions
             .registerCompletion("timezones") { TimeZone.getAvailableIDs().toMutableList() }
+        this.commandManager.commandContexts.registerContext(UUID::class.java) { ctx ->
+            val text = ctx.popFirstArg()
+            try {
+                return@registerContext UUID.fromString(text)
+            } catch (_: IllegalArgumentException) {
+                throw InvalidCommandArgument("$text is not a valid UUID")
+            }
+        }
 
         val poiService: PointsOfInterestService = DataContainerPointsOfInterestService(this)
         val defaultTimeFormat =
@@ -32,7 +38,7 @@ class Plugin : JavaPlugin() {
         val chatProcessor = DefaultChatProcessor(defaultChatFormatter)
 
         this.commandManager.registerCommand(CoordinatesCommand(poiService, chatProcessor))
-        this.commandManager.registerCommand(PointsOfInterestCommand(poiService))
+        this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
 
         this.server.pluginManager.registerEvents(ChatEventListener(chatProcessor), this)

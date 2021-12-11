@@ -3,7 +3,7 @@ package com.outdatedversion.survival
 import org.bukkit.Location
 import org.bukkit.World
 
-fun Location.asHumanReadableText(): String {
+fun Location.asText(): String {
     return "${this.blockX}, ${this.blockY}, ${this.blockZ} (${formatEnvironment(this.world.environment)})"
 }
 
