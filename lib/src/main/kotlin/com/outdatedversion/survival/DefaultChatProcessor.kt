@@ -15,7 +15,7 @@ class DefaultChatProcessor(private val defaultFormatter: ChatFormatter): ChatPro
     override fun processAndSendPlayerChat(player: Player, message: Component) {
         Bukkit.getOnlinePlayers().forEach { onlinePlayer ->
             var mentioned = false
-            val nameRegex = """(@?${onlinePlayer.name})""".toPattern(Pattern.CASE_INSENSITIVE)
+            val nameRegex = """(@?${Pattern.quote(onlinePlayer.name)})""".toPattern(Pattern.CASE_INSENSITIVE)
             val itemRegex = """(\[item])""".toPattern(Pattern.CASE_INSENSITIVE)
 
             val mentionReplacementConfig = TextReplacementConfig
