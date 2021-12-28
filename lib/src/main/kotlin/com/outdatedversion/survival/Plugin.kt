@@ -3,6 +3,7 @@ package com.outdatedversion.survival
 import co.aikar.commands.InvalidCommandArgument
 import co.aikar.commands.PaperCommandManager
 import com.outdatedversion.survival.command.CoordinatesCommand
+import com.outdatedversion.survival.command.IsSlimeChunkCommand
 import com.outdatedversion.survival.command.PointsOfInterestCommand
 import com.outdatedversion.survival.command.TimeZoneCommand
 import com.outdatedversion.survival.format.ChatFormatter
@@ -40,6 +41,7 @@ class Plugin: JavaPlugin() {
         this.commandManager.registerCommand(CoordinatesCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
+        this.commandManager.registerCommand(IsSlimeChunkCommand())
 
         this.server.pluginManager.registerEvents(DataMigrationEventListener(poiService), this)
         this.server.pluginManager.registerEvents(ChatEventListener(chatProcessor), this)
