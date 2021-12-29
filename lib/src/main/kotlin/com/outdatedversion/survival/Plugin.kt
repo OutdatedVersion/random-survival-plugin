@@ -2,11 +2,9 @@ package com.outdatedversion.survival
 
 import co.aikar.commands.InvalidCommandArgument
 import co.aikar.commands.PaperCommandManager
-import com.outdatedversion.survival.command.CoordinatesCommand
-import com.outdatedversion.survival.command.IsSlimeChunkCommand
-import com.outdatedversion.survival.command.PointsOfInterestCommand
-import com.outdatedversion.survival.command.TimeZoneCommand
+import com.outdatedversion.survival.command.*
 import com.outdatedversion.survival.format.ChatFormatter
+import com.outdatedversion.survival.format.PrivateMessageFormatter
 import com.outdatedversion.survival.format.VanillaChatFormatter
 import com.outdatedversion.survival.persistence.service.DataContainerPointsOfInterestService
 import com.outdatedversion.survival.persistence.service.PointsOfInterestService
@@ -37,11 +35,15 @@ class Plugin: JavaPlugin() {
             DateTimeFormatter.ofPattern("h:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
         val defaultChatFormatter: ChatFormatter = VanillaChatFormatter(this, defaultTimeFormat)
         val chatProcessor = DefaultChatProcessor(defaultChatFormatter)
+        val privateMessageFormatter = PrivateMessageFormatter(this, defaultTimeFormat)
+        val messagingModule = MessagingModule(privateMessageFormatter)
 
         this.commandManager.registerCommand(CoordinatesCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
         this.commandManager.registerCommand(IsSlimeChunkCommand())
+        messagingModule.register(this.commandManager)
+
 
         this.server.pluginManager.registerEvents(DataMigrationEventListener(poiService), this)
         this.server.pluginManager.registerEvents(ChatEventListener(chatProcessor), this)

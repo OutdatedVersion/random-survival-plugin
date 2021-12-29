@@ -23,13 +23,5 @@ class IsSlimeChunkCommand: BaseCommand() {
                 Component.text("You are not in a slime chunk (${chunk.x}, ${chunk.z})", NamedTextColor.RED)
             )
         }
-
-        if (player.name == "Nokoa") {
-            val entity = player.location.world.spawn(player.location, Chicken::class.java)
-            entity.isInvisible = true
-            entity.customName(Component.text("big thicc boi", NamedTextColor.RED))
-            player.damage(500.0, entity)
-            entity.remove()
-        }
     }
 }
