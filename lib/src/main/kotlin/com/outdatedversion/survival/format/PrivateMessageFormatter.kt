@@ -3,6 +3,7 @@ package com.outdatedversion.survival.format
 import com.outdatedversion.survival.Plugin
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
@@ -29,7 +30,8 @@ class PrivateMessageFormatter(private val plugin: Plugin, private val defaultTim
         return Component.join(
             JoinConfiguration.separator(Component.space()),
             Component.text(if (isSender) "To " else "From ", NamedTextColor.LIGHT_PURPLE)
-                .append(Component.text(if (isSender) "${recipient.name}" else "${sender.name}", NamedTextColor.AQUA))
+                .append(Component.text(if (isSender) "${recipient.name}" else "${sender.name}", NamedTextColor.AQUA)).clickEvent(
+                    ClickEvent.suggestCommand("/msg " + if (isSender) "${recipient.name}" else "${sender.name}"))
                 .append(Component.text(":", NamedTextColor.WHITE)).hoverEvent(HoverEvent.showText(timestampText)),
 
             message
