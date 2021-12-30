@@ -64,7 +64,7 @@ class MessageCommand(
     fun sendCannotMessagePlayerMessage(player: Player) {
         player.sendMessage(
             Component.text(
-                "You cannot message this player",
+                "You cannot message that player",
                 NamedTextColor.RED
             )
         )
