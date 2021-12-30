@@ -47,7 +47,7 @@ class MessageCommand(
             )
             return
         }
-        module.sendPrivateMessage(player, recipientPlayer, Component.text(message.joinToString(separator = " ", postfix = " ").trimStart()))
+        module.sendPrivateMessage(player, recipientPlayer, Component.text(message.joinToString(separator = " ")))
     }
 
     fun sendHelpMessage(player: Player) {
