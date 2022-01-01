@@ -35,6 +35,7 @@ class Plugin: JavaPlugin() {
             DateTimeFormatter.ofPattern("h:mma v").withLocale(Locale.US).withZone(ZoneId.of("America/Chicago"))
         val defaultChatFormatter: ChatFormatter = VanillaChatFormatter(this, defaultTimeFormat)
         val chatProcessor = DefaultChatProcessor(defaultChatFormatter)
+        // Creates the private message formatter used to format private messages, then create the messaging module and pass that
         val privateMessageFormatter = PrivateMessageFormatter(this, defaultTimeFormat)
         val messagingModule = MessagingModule(privateMessageFormatter)
 
@@ -42,6 +43,7 @@ class Plugin: JavaPlugin() {
         this.commandManager.registerCommand(PointsOfInterestCommand(poiService, chatProcessor))
         this.commandManager.registerCommand(TimeZoneCommand(this))
         this.commandManager.registerCommand(IsSlimeChunkCommand())
+        // Register the /msg and /reply with the server and initiate its tracking
         messagingModule.register(this.commandManager)
 
 

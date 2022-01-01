@@ -14,6 +14,12 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
+/**
+ *  Handles the execution of the reply command used to reply to/with private messages.
+ *  Validates that reply can be used for the current sender if module has saved recipient
+ *  Checks if that player is online
+ *  Tells module to send the messages
+ */
 @CommandAlias("r|reply|rpl")
 class ReplyCommand(
     private val module: MessagingModule,

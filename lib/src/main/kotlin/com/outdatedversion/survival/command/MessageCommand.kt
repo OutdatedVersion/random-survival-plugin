@@ -14,10 +14,18 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-@CommandAlias("msg|m|tell|whisper")
+/**
+ * Handles the execution of the message commands
+ * Validates player send command arguments
+ * Find the player recipient
+ * Tell module to send message
+ */
+@CommandAlias("msg|m|tell|whisper|pm|dm")
 class MessageCommand(
     private val module: MessagingModule,
 ): BaseCommand() {
+
+
     @Default
     @CommandCompletion("@players @nothing")
     @Description("Sends a private message to another player.")
