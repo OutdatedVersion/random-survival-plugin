@@ -27,6 +27,15 @@ class MessagingModule(private val privateMessageFormatter: PrivateMessageFormatt
     }
 
     /**
+     * Register the join and leave listeners with the [plugin] instance
+     * @param plugin instance of the plugin
+     */
+    fun registerListeners(plugin : Plugin){
+        plugin.server.pluginManager.registerEvents(MessagingModuleEventListeners(this), plugin)
+
+    }
+
+    /**
      * Sets the reply [recipient] for the [sender] in a map
      */
     fun setReply(sender: UUID, recipient: UUID) {
