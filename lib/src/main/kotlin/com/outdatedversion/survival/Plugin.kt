@@ -44,7 +44,8 @@ class Plugin: JavaPlugin() {
         this.commandManager.registerCommand(TimeZoneCommand(this))
         this.commandManager.registerCommand(IsSlimeChunkCommand())
         // Register the /msg and /reply with the server and initiate its tracking
-        messagingModule.register(this.commandManager)
+        messagingModule.register(this.commandManager, this)
+
 
 
         this.server.pluginManager.registerEvents(DataMigrationEventListener(poiService), this)

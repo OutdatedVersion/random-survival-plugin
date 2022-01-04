@@ -8,23 +8,30 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 
 /**
  * Manages and registers the private messages commands, and recipient reply tracking
  * @param privateMessageFormatter An instance of a private message formatter used to format private messages for players
  */
-class MessagingModule(private val privateMessageFormatter: PrivateMessageFormatter) {
+class MessagingModule(private val privateMessageFormatter: PrivateMessageFormatter) : Listener{
     private val recipientMap = hashMapOf<UUID, UUID>()
 
     /**
      * Register the /msg and the /reply commands with the server
+     * Register the join and leave listeners with the [plugin] instance
      * @param commandManager An instance of the server's command manager
+     * @param plugin instance of the plugin
      */
-    fun register(commandManager: PaperCommandManager) {
+    fun register(commandManager: PaperCommandManager, plugin: Plugin) {
         commandManager.registerCommand(MessageCommand(this))
         commandManager.registerCommand(ReplyCommand(this))
+        plugin.server.pluginManager.registerEvents(this, plugin)
     }
+
 
     /**
      * Sets the reply [recipient] for the [sender] in a map
@@ -65,5 +72,13 @@ class MessagingModule(private val privateMessageFormatter: PrivateMessageFormatt
         if (recipientMap[recipient.uniqueId] == null) {
             setReply(recipient.uniqueId, sender.uniqueId)
         }
+    }
+
+    /**
+     * Remove player's reply recipient when they leave the server
+     */
+    @EventHandler
+    fun handleQuit(event: PlayerQuitEvent){
+            removeReply(event.player.uniqueId)
     }
 }
