@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  title: 'Survival plugin API'
+  version: '0.1.0'
+components:
+  parameters:
+    Uuid:
+      in: path
+      name: uuid
+      required: true
+      examples:
+        Dashed:
+          $ref: '#/components/examples/UuidDashed'
+        Undashed:
+          $ref: '#/components/examples/UuidUndashed'
+      schema:
+        type: string
+    ServerId:
+      in: path
+      name: 'serverId'
+      required: true
+      example: Jg5Oug5NeIPLW9yN1GzB6fff
+      schema:
+        type: string
+  schemas:
+    ProfileBase:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: f471982d-8002-482c-a8d4-97dd768729ac
+        username:
+          type: string
+          example: Nokoa
+        timezone:
+          type: string
+          example: America/Chicago
+      required:
+        - uuid
+        - username
+        - timezone
+    Profile:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              example: 'V1StGXR8_Z5jdHi6B-myT'
+        - $ref: '#/components/schemas/ProfileBase'
+    SessionBase:
+      type: object
+      properties:
+        uuid:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+      required:
+        - uuid
+        - startedAt
+    Session:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+          required:
+            - id
+        - $ref: '#/components/schemas/SessionBase'
+  examples:
+    UuidDashed:
+      summary: v4 UUID with dashes
+      value: f471982d-8002-482c-a8d4-97dd768729ac
+    UuidUndashed:
+      summary: v4 UUID without dashes
+      value: f471982d8002482ca8d497dd768729ac
+paths:
+  '/servers/{serverId}/profiles/{uuid}':
+    get:
+      tags:
+        - Profile
+      summary: ''
+      description: ''
+      operationId: 'profiles-profileId-get'
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      responses:
+        200:
+          description: a
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+    post:
+      tags:
+        - Profile
+      summary: ''
+      description: ''
+      operationId: 'profiles-profileId-post'
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      requestBody:
+        description: 'yea!'
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/ProfileBase'
+      responses:
+        200:
+          description: a
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+    patch:
+      tags:
+        - Profile
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      responses:
+        default:
+          description: Default error sample response
+  '/servers/{serverId}/profiles/{uuid}/sessions':
+    get:
+      tags:
+        - Profile
+      summary: ''
+      description: ''
+      operationId: 'profiles-profileId-sessions-get'
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      responses:
+        default:
+          description: Default error sample response
+    post:
+      tags:
+       - Profile
+      summary: ''
+      description: ''
+      operationId: 'profiles-profileId-sessions-post'
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      responses:
+        default:
+          description: Default error sample response
+    patch:
+      tags:
+       - Profile
+      summary: ''
+      description: ''
+      operationId: 'profiles-profileId-sessions-patch'
+      parameters:
+        - $ref: '#/components/parameters/Uuid'
+        - $ref: '#/components/parameters/ServerId'
+      requestBody:
+        description: 'Providing `endedAt` terminates  `Session` as'
+        required: true
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                endedAt:
+                  type: string
+                  format: date-time
+              required:
+                - endedAt
+      responses:
+        default:
+          description: Default error sample response
+  '/servers/{serverId}/sessions':
+    get:
+      tags:
+      - Session
+      summary: ''
+      description: ''
+      operationId: 'sessions-get'
+      parameters:
+        - $ref: '#/components/parameters/ServerId'
+        - in: query
+          name: 'order'
+          required: false
+          schema:
+            type: string
+            enum:
+              - 'asc'
+              - 'dsc'
+      responses:
+        default:
+          description: Default error sample response
